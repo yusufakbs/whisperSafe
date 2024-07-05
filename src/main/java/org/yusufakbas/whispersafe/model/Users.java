@@ -2,6 +2,8 @@ package org.yusufakbas.whispersafe.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class Users {
     @Id
@@ -65,4 +67,16 @@ public class Users {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Users users = (Users) object;
+        return Objects.equals(id, users.id) && Objects.equals(fullName, users.fullName) && Objects.equals(email, users.email) && Objects.equals(profileImage, users.profileImage) && Objects.equals(password, users.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fullName, email, profileImage, password);
+    }
 }
