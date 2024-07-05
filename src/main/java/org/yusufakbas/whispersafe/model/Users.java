@@ -13,7 +13,7 @@ public class Users {
     private String profileImage;
     private String password;
 
-
+    //TODO : Look at the jwt conversation, review the notes
     public Users() {
     }
 

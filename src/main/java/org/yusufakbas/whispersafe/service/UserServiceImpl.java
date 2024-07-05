@@ -1,15 +1,17 @@
 package org.yusufakbas.whispersafe.service;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.stereotype.Service;
 import org.yusufakbas.whispersafe.config.TokenProvider;
 import org.yusufakbas.whispersafe.exception.UserException;
 import org.yusufakbas.whispersafe.model.Users;
-import org.yusufakbas.whispersafe.model.request.UpdateUserRequest;
+import org.yusufakbas.whispersafe.request.UpdateUserRequestDto;
 import org.yusufakbas.whispersafe.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -43,8 +45,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Users updateUser(Long userId, UpdateUserRequest updateUserRequest) {
-        return null;
+    public Users updateUser(Long userId, UpdateUserRequestDto updateUserRequest) throws UserException {
+        Users user = findUserById(userId);
+
+        if (updateUserRequest.fullName() != null && updateUserRequest.profileImage() != null) {
+            user.setFullName(updateUserRequest.fullName());
+            user.setProfileImage(updateUserRequest.profileImage());
+        }
+
+        return userRepository.save(user);
     }
 
     @Override
