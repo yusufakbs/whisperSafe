@@ -132,7 +132,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void deleteChat(Long chatId, Users reqUser) throws ChatException, UserException {
+    public void deleteChat(Long chatId, Long userId) throws ChatException, UserException {
         Optional<Chat> optionalChat = chatRepository.findById(chatId);
         if (optionalChat.isPresent()) {
             Chat chat = optionalChat.get();

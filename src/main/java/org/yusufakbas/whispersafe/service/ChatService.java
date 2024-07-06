@@ -24,7 +24,7 @@ public interface ChatService {
 
     public Chat removeFromGroup(Long chatId, Long userId, Users reqUser) throws UserException, ChatException;
 
-    public void deleteChat(Long chatId, Users reqUser) throws ChatException, UserException;
+    public void deleteChat(Long chatId, Long userId) throws ChatException, UserException;
 
 
 }
