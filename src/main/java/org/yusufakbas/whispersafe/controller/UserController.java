@@ -41,7 +41,6 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateUserHandler(@RequestBody UpdateUserRequestDto requestDto, @RequestHeader("Authorization") String token) throws UserException {
         Users user = userService.findUserProfile(token);
         userService.updateUser(user.getId(), requestDto);
-
         ApiResponse response = new ApiResponse("user updated successfully", true);
 
         return new ResponseEntity<ApiResponse>(response, HttpStatus.ACCEPTED);

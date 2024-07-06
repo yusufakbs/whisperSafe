@@ -59,7 +59,6 @@ public class ChatController {
     @GetMapping("/user")
     public ResponseEntity<List<Chat>> findAllChatByUserIdHandler(@RequestHeader("Authorization") String jwt) throws UserException {
         Users reqUser = userService.findUserProfile(jwt);
-
         List<Chat> chats = chatService.findAllChatByUserId(reqUser.getId());
 
         return new ResponseEntity<List<Chat>>(chats, HttpStatus.OK);
@@ -70,7 +69,6 @@ public class ChatController {
     @PutMapping("/{chatId}/add/{userId}")
     public ResponseEntity<Chat> addUserToGroupHandler(@PathVariable Long chatId, @PathVariable Long userId, @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
         Users reqUser = userService.findUserProfile(jwt);
-
         Chat chats = chatService.addUserToGroup(userId, chatId, reqUser);
 
         return new ResponseEntity<Chat>(chats, HttpStatus.OK);
@@ -80,7 +78,6 @@ public class ChatController {
     @DeleteMapping("/{chatId}/add/{userId}")
     public ResponseEntity<Chat> removeUserFromGroupHandler(@PathVariable Long chatId, @PathVariable Long userId, @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
         Users reqUser = userService.findUserProfile(jwt);
-
         Chat chats = chatService.removeFromGroup(chatId, userId, reqUser);
 
         return new ResponseEntity<Chat>(chats, HttpStatus.OK);
@@ -90,9 +87,7 @@ public class ChatController {
     @DeleteMapping("/delete/{chatId}")
     public ResponseEntity<ApiResponse> deleteChatHandler(@PathVariable Long chatId, @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
         Users reqUser = userService.findUserProfile(jwt);
-
         chatService.deleteChat(chatId, reqUser.getId());
-
         ApiResponse response = new ApiResponse("Chat is deleted successfully", true);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
