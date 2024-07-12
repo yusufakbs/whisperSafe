@@ -9,6 +9,7 @@ import { ImAttachment } from 'react-icons/im'
 import "./HomePage.css"
 import { useNavigate } from 'react-router-dom'
 import Profile from './Profile/Profile'
+import Status from './Status/Status'
 
 const HomePage = () => {
 
@@ -19,79 +20,80 @@ const HomePage = () => {
   const handleCreateNewMessage = () => { }
   const navigate = useNavigate();
   const [isProfile, setIsProfile] = useState(false);
-  const handleClickOnChatCard = () => [
-    setCurrentChat(true)
-  ]
+  const handleClickOnChatCard = () => [setCurrentChat(true)]
   const handleNavigate = () => {
     //navigate("/profile")
     setIsProfile(true);
   }
-
   const handleCloseOpenProfile = () => {
     setIsProfile(false);
   }
-
 
   return (
     <div className='relative'>
       <div className='w-full py-14 bg-[#060a09]'></div>
       <div className='flex bg-[#f0f2f5] h-[90vh]  absolute top-[5vh] left-[2vw] w-[96vw]'>
         <div className='left w-[30%] bg-[#e8e9ec] h-full '>
+
           {/** Profile */}
-          {isProfile && <div className='w-full h-full'>
-            <Profile handleCloseOpenProfile={handleCloseOpenProfile} />
-          </div>
+          {
+            isProfile && <div className='w-full h-full'>
+              <Profile handleCloseOpenProfile={handleCloseOpenProfile} />
+            </div>
           }
 
-          {!isProfile && <div className='w-full'>
-            {/** Home page */}
-            {<div className='flex justify-between items-center p-3'>
-              <div onClick={handleNavigate} className='flex items-center space-x-3'>
-                <img className='rounded-full w-10 h-10 cursor-pointer'
-                  src="https://cdn.pixabay.com/photo/2024/03/04/16/38/cat-8612685_960_720.jpg" alt="" />
-                <p>Username</p>
-              </div>
-              <div className='space-x-3 text-2xl flex'>
-                <TbCircleDashed />
-                <BiCommentDetail />
-              </div>
-            </div>}
-
-            <div className='relative flex justify-center items-center bg-white py-4 px-3'>
-              <input className='border-none outline-none bg-slate-200 rounded-md w-[93%] pl-9 py-2' type='text'
-                placeholder='Search or start new Chat'
-                onChange={(e) => {
-                  setQuerys(e.target.value)
-                  handleSearch(e.target.value)
-                }}
-                value={querys}
-              />
-              <AiOutlineSearch className='left-5 top-7 absolute ' />
-              <div>
-                <BsFilter className='ml-4 text-3xl' />
-              </div>
-            </div>
-
-
-            {/* all user*/}
-            <div className='bg-white overflow-y-scroll h-[72vh] px-2'>
-              {querys && [1, 1, 1, 1, 1].map((item) => (
-                <div onClick={handleClickOnChatCard}>
-                  {" "}
-                  <hr /> <ChatCard /> {" "}
+          {
+            !isProfile && <div className='w-full'>
+              {/** Home page */}
+              {
+                <div className='flex justify-between items-center p-3'>
+                  <div onClick={handleNavigate} className='flex items-center space-x-3'>
+                    <img className='rounded-full w-10 h-10 cursor-pointer'
+                      src="https://cdn.pixabay.com/photo/2024/03/04/16/38/cat-8612685_960_720.jpg" alt="" />
+                    <p>Username</p>
+                  </div>
+                  <div className='space-x-3 text-2xl flex'>
+                    <TbCircleDashed className='cursor-pointer' onClick={() => navigate("/status")} />
+                    <BiCommentDetail />
+                  </div>
                 </div>
-              ))}
+              }
+
+              <div className='relative flex justify-center items-center bg-white py-4 px-3'>
+                <input className='border-none outline-none bg-slate-200 rounded-md w-[93%] pl-9 py-2' type='text'
+                  placeholder='Search or start new Chat'
+                  onChange={(e) => {
+                    setQuerys(e.target.value)
+                    handleSearch(e.target.value)
+                  }}
+                  value={querys}
+                />
+                <AiOutlineSearch className='left-5 top-7 absolute ' />
+                <div>
+                  <BsFilter className='ml-4 text-3xl' />
+                </div>
+              </div>
+
+              {/* all user*/}
+              <div className='bg-white overflow-y-scroll h-[72vh] px-2'>
+                {
+                  querys && [1, 1, 1, 1, 1].map((item) => (
+                    <div onClick={handleClickOnChatCard}>
+                      {" "}
+                      <hr /> <ChatCard /> {" "}
+                    </div>
+                  ))
+                }
+              </div>
+              <div>
+              </div>
             </div>
-            <div>
-            </div>
-          </div>}
+          }
         </div>
-
-
 
         {/* Default Page */}
 
-        {!currentChat && <div className='w-[70%] flex flex-col items-center justify-center h-full w-full'>
+        {!currentChat && <div className='w-[70%] flex flex-col items-center justify-center h-full'>
           <div className='max-w-[70%] text-center '>
             <img src="https://cdn.pixabay.com/photo/2016/03/31/19/14/chat-1294839_960_720.png" alt="" />
             <h1 className='text-4xl text-gray-600'>WhispareSafe</h1>
@@ -100,7 +102,9 @@ const HomePage = () => {
         </div>}
 
         {/* {message part}  */}
-        {currentChat &&
+
+        {
+          currentChat &&
           <div className='w-[70%] relative bg-gray-200'>
             <div className='header absolute top-0 w-full bg-[#f0f2f5]'>
               <div className='flex justify-between'>
@@ -123,28 +127,28 @@ const HomePage = () => {
                 {[1, 1, 1, 1, 1].map((item, i) => <MessageCard isReqUserMessage={i % 2 === 0} content={"message"} />)}
               </div>
             </div>
+
             {/** footer part */}
             <div className='footer bg-[#f0f2f5] absolute bottom-0 w-full py-3 text-2xl'>
               <div className='flex justify-between items-center px-5 relative'>
-
                 <BsEmojiSmile className='cursor-pointer' />
                 <ImAttachment />
-                <input className='py-2 outline-none border-none bg-white pl-4 rounded w-[85%]' placeholder='Type message' value={content} onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    handleCreateNewMessage();
-                    setContent("");
-                  }
-                }} type="text" onChange={(e) => setContent(e.target.value)} />
+                <input className='py-2 outline-none border-none bg-white pl-4 rounded w-[85%]' placeholder='Type message' value={content}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleCreateNewMessage();
+                      setContent("");
+                    }
+                  }}
+                  type="text"
+                  onChange={
+                    (e) => setContent(e.target.value)
+                  } />
                 <BsMicFill />
               </div>
-
             </div>
-
-          </div>}
-
-
-
-
+          </div>
+        }
       </div>
     </div>
   )
