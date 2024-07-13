@@ -10,6 +10,8 @@ import "./HomePage.css"
 import { useNavigate } from 'react-router-dom'
 import Profile from './Profile/Profile'
 import Status from './Status/Status'
+import { Button, Menu, MenuItem } from '@mui/material'
+import CreateGroup from './Group/CreateGroup'
 
 const HomePage = () => {
 
@@ -19,6 +21,16 @@ const HomePage = () => {
   const [content, setContent] = useState("");
   const handleCreateNewMessage = () => { }
   const navigate = useNavigate();
+  const [isGroup, setIsGroup] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const [isProfile, setIsProfile] = useState(false);
   const handleClickOnChatCard = () => [setCurrentChat(true)]
   const handleNavigate = () => {
@@ -29,6 +41,10 @@ const HomePage = () => {
     setIsProfile(false);
   }
 
+  const handleCreateGroup = () => {
+    setIsGroup(true)
+  }
+
   return (
     <div className='relative'>
       <div className='w-full py-14 bg-[#060a09]'></div>
@@ -36,6 +52,7 @@ const HomePage = () => {
         <div className='left w-[30%] bg-[#e8e9ec] h-full '>
 
           {/** Profile */}
+          {isGroup && <CreateGroup />}
           {
             isProfile && <div className='w-full h-full'>
               <Profile handleCloseOpenProfile={handleCloseOpenProfile} />
@@ -43,7 +60,7 @@ const HomePage = () => {
           }
 
           {
-            !isProfile && <div className='w-full'>
+            !isProfile && !isGroup && <div className='w-full'>
               {/** Home page */}
               {
                 <div className='flex justify-between items-center p-3'>
@@ -55,6 +72,28 @@ const HomePage = () => {
                   <div className='space-x-3 text-2xl flex'>
                     <TbCircleDashed className='cursor-pointer' onClick={() => navigate("/status")} />
                     <BiCommentDetail />
+
+                    <div>
+                      <BsThreeDotsVertical id="basic-button"
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick} />
+
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                      >
+                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                        <MenuItem onClick={handleCreateGroup}>Create Group</MenuItem>
+                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                      </Menu>
+                    </div>
                   </div>
                 </div>
               }
@@ -116,7 +155,15 @@ const HomePage = () => {
                 </div>
                 <div className='py-3 flex space-x-4 items-center px-3'>
                   <AiOutlineSearch />
-                  <BsThreeDotsVertical />
+                  <Button
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                  >
+                    <BsThreeDotsVertical />
+                  </Button>
                 </div>
               </div>
             </div>
