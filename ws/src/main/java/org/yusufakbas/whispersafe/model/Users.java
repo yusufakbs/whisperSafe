@@ -10,7 +10,7 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String fullName;
+    private String username;
     private String email;
     private String profileImage;
     private String password;
@@ -19,9 +19,9 @@ public class Users {
     public Users() {
     }
 
-    public Users(Long id, String fullName, String email, String profileImage, String password) {
+    public Users(Long id, String username, String email, String profileImage, String password) {
         this.id = id;
-        this.fullName = fullName;
+        this.username = username;
         this.email = email;
         this.profileImage = profileImage;
         this.password = password;
@@ -35,12 +35,12 @@ public class Users {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -72,11 +72,11 @@ public class Users {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Users users = (Users) object;
-        return Objects.equals(id, users.id) && Objects.equals(fullName, users.fullName) && Objects.equals(email, users.email) && Objects.equals(profileImage, users.profileImage) && Objects.equals(password, users.password);
+        return Objects.equals(id, users.id) && Objects.equals(username, users.username) && Objects.equals(email, users.email) && Objects.equals(profileImage, users.profileImage) && Objects.equals(password, users.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fullName, email, profileImage, password);
+        return Objects.hash(id, username, email, profileImage, password);
     }
 }

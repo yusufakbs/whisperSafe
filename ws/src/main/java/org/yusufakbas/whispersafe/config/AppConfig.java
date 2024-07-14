@@ -24,9 +24,11 @@ public class AppConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers("/api/v1/**")
-                                .authenticated()
-                                .anyRequest()
                                 .permitAll()
+                                .anyRequest()
+                                .authenticated()
+
+
                 )
                 .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class) // Null yerine gerçek filtrenizi koyun
                 .csrf(AbstractHttpConfigurer::disable)
@@ -41,7 +43,7 @@ public class AppConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:4747"));
+        config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         config.setAllowedMethods(List.of("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));

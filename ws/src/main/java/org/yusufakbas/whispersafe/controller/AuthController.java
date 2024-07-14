@@ -8,10 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yusufakbas.whispersafe.config.TokenProvider;
 import org.yusufakbas.whispersafe.exception.UserException;
 import org.yusufakbas.whispersafe.model.Users;
@@ -19,6 +16,8 @@ import org.yusufakbas.whispersafe.repository.UserRepository;
 import org.yusufakbas.whispersafe.request.LoginRequest;
 import org.yusufakbas.whispersafe.response.AuthResponse;
 import org.yusufakbas.whispersafe.service.CustomUserService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -40,17 +39,19 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody Users user) throws UserException {
         String email = user.getEmail();
-        String full_name = user.getFullName();
+        String username = user.getUsername();
         String password = user.getPassword();
-
-        Users isUser = userRepository.findByEmail(email);
-        if (isUser != null) {
-            throw new UserException("Email is used with another account" + email);
+        System.out.println(email);
+        System.out.println(username);
+        System.out.println(password);
+        Optional<Users> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
+        if (userOptional.isPresent()) {
+            throw new UserException("Email already in use");
         }
 
         Users cratedUser = new Users();
         cratedUser.setEmail(email);
-        cratedUser.setFullName(full_name);
+        cratedUser.setUsername(username);
         cratedUser.setPassword(passwordEncoder.encode(password));
         userRepository.save(cratedUser);
 
@@ -64,6 +65,7 @@ public class AuthController {
     }
 
 
+    @PostMapping("/signin")
     public ResponseEntity<AuthResponse> loginHandler(@RequestBody LoginRequest loginRequest) throws BadRequestException {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();

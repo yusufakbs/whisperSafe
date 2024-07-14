@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
     public Users updateUser(Long userId, UpdateUserRequestDto updateUserRequest) throws UserException {
         Users user = findUserById(userId);
 
-        if (updateUserRequest.fullName() != null && updateUserRequest.profileImage() != null) {
-            user.setFullName(updateUserRequest.fullName());
+        if (updateUserRequest.username() != null && updateUserRequest.profileImage() != null) {
+            user.setUsername(updateUserRequest.username());
             user.setProfileImage(updateUserRequest.profileImage());
         }
 

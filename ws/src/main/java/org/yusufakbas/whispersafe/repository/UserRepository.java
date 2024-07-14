@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     public Users findByEmail(String email);
 
-    @Query("select u from Users u where u.fullName like %:query% or u.email like %:query%")
+    @Query("select u from Users u where u.username like %:query% or u.email like %:query%")
     public List<Users> searchUser(@Param("query") String query);
 
 }

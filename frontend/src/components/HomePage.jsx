@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 import { TbCircleDashed } from 'react-icons/tb'
@@ -12,6 +12,8 @@ import Profile from './Profile/Profile'
 import Status from './Status/Status'
 import { Button, Menu, MenuItem } from '@mui/material'
 import CreateGroup from './Group/CreateGroup'
+import { useDispatch, useSelector } from 'react-redux'
+import { currentUser, logoutAction } from '../redux/Auth/Action'
 
 const HomePage = () => {
 
@@ -21,9 +23,12 @@ const HomePage = () => {
   const [content, setContent] = useState("");
   const handleCreateNewMessage = () => { }
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { auth } = useSelector(store => store)
   const [isGroup, setIsGroup] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const token = localStorage.getItem("token");
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -44,6 +49,21 @@ const HomePage = () => {
   const handleCreateGroup = () => {
     setIsGroup(true)
   }
+
+  useEffect(() => {
+    dispatch(currentUser(token))
+  }, [token])
+
+  const handleLogout = () => {
+    dispatch(logoutAction())
+    navigate("/signup")
+  }
+
+  useEffect(() => {
+    if (!auth.reqUser) {
+      navigate("/signup")
+    }
+  }, [auth.reqUser])
 
   return (
     <div className='relative'>
@@ -67,7 +87,8 @@ const HomePage = () => {
                   <div onClick={handleNavigate} className='flex items-center space-x-3'>
                     <img className='rounded-full w-10 h-10 cursor-pointer'
                       src="https://cdn.pixabay.com/photo/2024/03/04/16/38/cat-8612685_960_720.jpg" alt="" />
-                    <p>Username</p>
+                    <p>                    {auth.reqUser?.username}
+                    </p>
                   </div>
                   <div className='space-x-3 text-2xl flex'>
                     <TbCircleDashed className='cursor-pointer' onClick={() => navigate("/status")} />
@@ -91,7 +112,7 @@ const HomePage = () => {
                       >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                         <MenuItem onClick={handleCreateGroup}>Create Group</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
                       </Menu>
                     </div>
                   </div>
@@ -150,7 +171,7 @@ const HomePage = () => {
                 <div className='py-3 space-x-4 flex items-center px-3'>
                   <img className='w-10 h-10 rounded-full' src="https://cdn.pixabay.com/photo/2024/06/26/14/02/moon-8855057_960_720.jpg" alt="" />
                   <p>
-                    Username
+                    asdasd
                   </p>
                 </div>
                 <div className='py-3 flex space-x-4 items-center px-3'>

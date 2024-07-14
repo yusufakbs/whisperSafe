@@ -67,7 +67,7 @@ public class MessageServiceImpl implements MessageService {
         if (message.getUsers().getId().equals(reqUser.getId())) {
             messageRepository.deleteById(messageId);
         }
-        throw new UserException("You can't delete another user's message" + reqUser.getFullName());
+        throw new UserException("You can't delete another user's message" + reqUser.getUsername());
     }
 
 }

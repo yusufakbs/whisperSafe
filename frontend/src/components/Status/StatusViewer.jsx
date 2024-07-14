@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { stories } from './DummyStory'
+import { stories } from './DummyStory.jsx'
 import ProgressBar from './ProgressBar.jsx';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { BsArrowLeft } from 'react-icons/bs';

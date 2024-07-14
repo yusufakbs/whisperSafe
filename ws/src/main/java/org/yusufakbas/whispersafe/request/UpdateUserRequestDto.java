@@ -1,6 +1,6 @@
 package org.yusufakbas.whispersafe.request;
 
-public record UpdateUserRequestDto(String fullName, String profileImage) {
+public record UpdateUserRequestDto(String username, String profileImage) {
 
     public UpdateUserRequestDto {
         // Constructor body can be added here if needed
