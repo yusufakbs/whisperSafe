@@ -16,7 +16,7 @@ import org.yusufakbas.whispersafe.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/chat")
+@RequestMapping("/api/v1/chats")
 public class ChatController {
 
     private final ChatService chatService;

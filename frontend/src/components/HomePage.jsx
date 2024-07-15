@@ -87,7 +87,8 @@ const HomePage = () => {
                   <div onClick={handleNavigate} className='flex items-center space-x-3'>
                     <img className='rounded-full w-10 h-10 cursor-pointer'
                       src="https://cdn.pixabay.com/photo/2024/03/04/16/38/cat-8612685_960_720.jpg" alt="" />
-                    <p>                    {auth.reqUser?.username}
+                    <p>
+                      {auth.reqUser?.username}
                     </p>
                   </div>
                   <div className='space-x-3 text-2xl flex'>
@@ -171,7 +172,7 @@ const HomePage = () => {
                 <div className='py-3 space-x-4 flex items-center px-3'>
                   <img className='w-10 h-10 rounded-full' src="https://cdn.pixabay.com/photo/2024/06/26/14/02/moon-8855057_960_720.jpg" alt="" />
                   <p>
-                    asdasd
+                  {auth.reqUser?.username}
                   </p>
                 </div>
                 <div className='py-3 flex space-x-4 items-center px-3'>
