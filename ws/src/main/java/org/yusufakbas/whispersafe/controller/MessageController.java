@@ -3,9 +3,11 @@ package org.yusufakbas.whispersafe.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.yusufakbas.whispersafe.dto.MessageDto;
 import org.yusufakbas.whispersafe.exception.ChatException;
 import org.yusufakbas.whispersafe.exception.MessageException;
 import org.yusufakbas.whispersafe.exception.UserException;
+import org.yusufakbas.whispersafe.mapper.MessageDtoMapper;
 import org.yusufakbas.whispersafe.model.Message;
 import org.yusufakbas.whispersafe.model.Users;
 import org.yusufakbas.whispersafe.request.SendMessageRequest;
@@ -16,7 +18,7 @@ import org.yusufakbas.whispersafe.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/message")
+@RequestMapping("/api/v1/messages")
 public class MessageController {
 
     private final MessageService messageService;
@@ -27,14 +29,14 @@ public class MessageController {
         this.userService = userService;
     }
 
-
     @PostMapping("/create")
-    public ResponseEntity<Message> sendMessageHandler(@RequestBody SendMessageRequest sendMessageRequest, @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
-        Users user = userService.findUserProfile(jwt);
-        sendMessageRequest.setUserId(user.getId());
+    public ResponseEntity<MessageDto> sendMessageHandler(@RequestBody SendMessageRequest sendMessageRequest, @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+        Users reqUser = userService.findUserProfile(jwt);
+        sendMessageRequest.setUserId(reqUser.getId());
         Message message = messageService.sendMessage(sendMessageRequest);
+        MessageDto messageDto = MessageDtoMapper.toMessageDto(message);
 
-        return new ResponseEntity<Message>(message, HttpStatus.OK);
+        return new ResponseEntity<MessageDto>(messageDto, HttpStatus.OK);
     }
 
     @GetMapping("/chat/{chatId}")
@@ -46,7 +48,6 @@ public class MessageController {
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{messageId}")
     public ResponseEntity<ApiResponse> deleteMessageHandler(@PathVariable Long messageId, @RequestHeader("Authorization") String jwt) throws UserException, MessageException {
         Users user = userService.findUserProfile(jwt);
@@ -55,6 +56,4 @@ public class MessageController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 }

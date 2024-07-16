@@ -36,6 +36,7 @@ public class MessageServiceImpl implements MessageService {
         message.setUsers(user);
         message.setContent(request.getContent());
         message.setTimeStamp(LocalDateTime.now());
+        messageRepository.save(message);
 
         return message;
     }

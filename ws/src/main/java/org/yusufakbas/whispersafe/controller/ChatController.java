@@ -3,8 +3,10 @@ package org.yusufakbas.whispersafe.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.yusufakbas.whispersafe.dto.ChatDto;
 import org.yusufakbas.whispersafe.exception.ChatException;
 import org.yusufakbas.whispersafe.exception.UserException;
+import org.yusufakbas.whispersafe.mapper.ChatDtoMapper;
 import org.yusufakbas.whispersafe.model.Chat;
 import org.yusufakbas.whispersafe.model.Users;
 import org.yusufakbas.whispersafe.request.GroupChatRequest;
@@ -13,7 +15,9 @@ import org.yusufakbas.whispersafe.response.ApiResponse;
 import org.yusufakbas.whispersafe.service.ChatService;
 import org.yusufakbas.whispersafe.service.UserService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/chats")
@@ -25,15 +29,17 @@ public class ChatController {
     public ChatController(ChatService chatService, UserService userService) {
         this.chatService = chatService;
         this.userService = userService;
-    }
+        }
 
 
     @PostMapping("/single")
-    public ResponseEntity<Chat> createChatHandler(@RequestBody SingleChatRequest singleChatRequest, @RequestHeader("Authorization") String jwt) throws UserException {
+    public ResponseEntity<ChatDto> createChatHandler(@RequestBody SingleChatRequest singleChatRequest, @RequestHeader("Authorization") String jwt) throws UserException {
         Users reqUser = userService.findUserProfile(jwt);
         Chat chat = chatService.createChat(reqUser, singleChatRequest.getUserId());
-
-        return new ResponseEntity<Chat>(chat, HttpStatus.OK);
+        System.out.println(reqUser.getId());
+        System.out.println(singleChatRequest.getUserId());
+        ChatDto chatDto = ChatDtoMapper.toChatDto(chat);
+        return new ResponseEntity<>(chatDto, HttpStatus.OK);
 
     }
 
@@ -57,12 +63,12 @@ public class ChatController {
 
 
     @GetMapping("/user")
-    public ResponseEntity<List<Chat>> findAllChatByUserIdHandler(@RequestHeader("Authorization") String jwt) throws UserException {
+    public ResponseEntity<Set<ChatDto>> findAllChatByUserIdHandler(@RequestHeader("Authorization") String jwt) throws UserException {
         Users reqUser = userService.findUserProfile(jwt);
         List<Chat> chats = chatService.findAllChatByUserId(reqUser.getId());
+        Set<ChatDto> chatDtos = ChatDtoMapper.toChatDtos(new HashSet<>(chats));
 
-        return new ResponseEntity<List<Chat>>(chats, HttpStatus.OK);
-
+        return new ResponseEntity<>(chatDtos, HttpStatus.OK);
     }
 
 

@@ -3,12 +3,15 @@ package org.yusufakbas.whispersafe.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.yusufakbas.whispersafe.dto.UserDto;
 import org.yusufakbas.whispersafe.exception.UserException;
+import org.yusufakbas.whispersafe.mapper.UserDtoMapper;
 import org.yusufakbas.whispersafe.model.Users;
 import org.yusufakbas.whispersafe.request.UpdateUserRequestDto;
 import org.yusufakbas.whispersafe.response.ApiResponse;
 import org.yusufakbas.whispersafe.service.UserService;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -44,6 +47,17 @@ public class UserController {
         ApiResponse response = new ApiResponse("user updated successfully", true);
 
         return new ResponseEntity<ApiResponse>(response, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<HashSet<UserDto>> searchUsersByName(@RequestParam("name") String name) {
+        System.out.println("searchUsersByName: " + name);
+        List<Users> users = userService.searchUser(name);
+        HashSet<Users> set = new HashSet<>(users);
+        HashSet<UserDto> userDtos = UserDtoMapper.toUserDtos(set);
+        System.out.println("search result ------" + userDtos);
+
+        return new ResponseEntity<>(userDtos, HttpStatus.ACCEPTED);
     }
 
 }
