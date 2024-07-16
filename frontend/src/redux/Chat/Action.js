@@ -3,7 +3,7 @@ import { CREATE_CHAT, CREATE_GROUP, GET_USERS_CHAT } from "./ActionType";
 
 export const createChat = (chatData) => async (dispatch) => {
     try {
-        const res = await fetch(`${BASE_API_URL}/chats/signle`, {
+        const res = await fetch(`${BASE_API_URL}/chats/single`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export const getUsersChat = (chatData) => async (dispatch) => {
         })
 
         const data = await res.json();
-        console.log("create chat", data);
+        console.log("users chat", data);
         dispatch({ type: GET_USERS_CHAT, payload: data })
     } catch (error) {
         console.log("catch error", error);
