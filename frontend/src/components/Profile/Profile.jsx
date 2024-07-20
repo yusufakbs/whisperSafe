@@ -92,10 +92,10 @@ const Profile = ({ handleCloseOpenProfile }) => {
 
             {/** Name section */}
             <div className='bg-white px-3'>
-                <p className='py-3'>Your Name</p>
+                <p className='py-3'>Username</p>
                 {!isEditing ? (
                     <div className='w-full flex justify-between items-center'>
-                        <p className='py-3'>{username || "username"}</p>
+                        <p className='py-3'>{auth.reqUser.username || "username"}</p>
                         <BsPencil onClick={() => setIsEditing(true)} className='cursor-pointer' />
                     </div>
                 ) : (

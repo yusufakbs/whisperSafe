@@ -1,11 +1,15 @@
 package org.yusufakbas.whispersafe.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Set;
 
 public class ChatDto {
     private Long id;
+    @JsonProperty("chat_name")
     private String chatName;
+    @JsonProperty("chat_image")
     private String chatImage;
     private boolean isGroup;
     private UserDto createdBy;
@@ -16,7 +20,8 @@ public class ChatDto {
     public ChatDto() {
     }
 
-    public ChatDto(Long id, String chatName, String chatImage, boolean isGroup, UserDto createdBy, Set<UserDto> users, List<Long> messages, Set<UserDto> admins) {
+    public ChatDto(Long id, String chatName, String chatImage, boolean isGroup, UserDto createdBy, Set<UserDto> users,
+            List<Long> messages, Set<UserDto> admins) {
         this.id = id;
         this.chatName = chatName;
         this.chatImage = chatImage;

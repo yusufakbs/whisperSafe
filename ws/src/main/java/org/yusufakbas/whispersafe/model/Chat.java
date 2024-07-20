@@ -1,7 +1,7 @@
 package org.yusufakbas.whispersafe.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,9 +15,10 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "chat_name")
     private String chatName;
+    @Column(name = "chat_image")
     private String chatImage;
-
     @ManyToMany
     private Set<Users> admins = new HashSet<>();
 
@@ -36,7 +37,8 @@ public class Chat {
     public Chat() {
     }
 
-    public Chat(Long id, String chatName, String chatImage, boolean isGroup, Users createdBy, Set<Users> users, List<Message> messages, Set<Users> admins) {
+    public Chat(Long id, String chatName, String chatImage, boolean isGroup, Users createdBy, Set<Users> users,
+            List<Message> messages, Set<Users> admins) {
         this.id = id;
         this.chatName = chatName;
         this.chatImage = chatImage;

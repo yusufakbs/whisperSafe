@@ -17,7 +17,6 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
     private final UserService userService;
 
-
     public ChatServiceImpl(ChatRepository chatRepository, UserService userService) {
         this.chatRepository = chatRepository;
         this.userService = userService;
@@ -71,6 +70,7 @@ public class ChatServiceImpl implements ChatService {
             group.getUsers().add(user);
         }
 
+        chatRepository.save(group);
         return group;
     }
 
@@ -78,7 +78,6 @@ public class ChatServiceImpl implements ChatService {
     public Chat addUserToGroup(Long userId, Long chatId, Users userReq) throws UserException, ChatException {
         Optional<Chat> optionalChat = chatRepository.findById(chatId);
         Users user = userService.findUserById(userId);
-
 
         if (optionalChat.isPresent()) {
             Chat chat = optionalChat.get();

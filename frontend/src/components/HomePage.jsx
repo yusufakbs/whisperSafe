@@ -101,7 +101,7 @@ const HomePage = () => {
         <div className='left w-[30%] bg-[#e8e9ec] h-full '>
 
           {/** Profile */}
-          {group && <CreateGroup />}
+          {group && <CreateGroup setGroup={setGroup} />}
           {
             isProfile && <div className='w-full h-full'>
               <Profile handleCloseOpenProfile={handleCloseOpenProfile} />
@@ -176,8 +176,8 @@ const HomePage = () => {
                   <div onClick={() => handleCurrentChat(item)}>
                     <hr />
                     {item.group ? (
-                      <ChatCard name={item.chatName}
-                        userImage={item.chatImage || "https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png"} />
+                      <ChatCard name={item.chat_name}
+                        userImage={item.chat_image || "https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png"} />
                     ) : (
                       <ChatCard isChat={true}
                         name={auth.reqUser?.id !== item.users[0]?.id
@@ -215,11 +215,11 @@ const HomePage = () => {
             <div className='header absolute top-0 w-full bg-[#f0f2f5]'>
               <div className='flex justify-between'>
                 <div className='py-3 space-x-4 flex items-center px-3'>
-                  <img className='w-10 h-10 rounded-full' src={currentChat.group ? currentChat.chatImage || "https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png" : (auth.reqUser.id !== currentChat.users[0].id
+                  <img className='w-10 h-10 rounded-full' src={currentChat.group ? currentChat.chat_image || "https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png" : (auth.reqUser.id !== currentChat.users[0].id
                     ? currentChat.users[0].profileImage || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png"
                     : currentChat.users[1].profileImage || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png")} alt="" />
                   <p>
-                    {currentChat.group ? currentChat.chatName : (auth.reqUser?.id === currentChat.users[0].id ? currentChat.users[1].username : currentChat.users[0].username)}
+                    {currentChat.group ? currentChat.chat_name : (auth.reqUser?.id === currentChat.users[0].id ? currentChat.users[1].username : currentChat.users[0].username)}
                   </p>
                 </div>
                 <div className='py-3 flex space-x-4 items-center px-3'>
