@@ -1,5 +1,6 @@
 package org.yusufakbas.whispersafe.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -12,6 +13,7 @@ public class Users {
 
     private String username;
     private String email;
+    @JsonProperty("profile_image")
     private String profileImage;
     private String password;
 

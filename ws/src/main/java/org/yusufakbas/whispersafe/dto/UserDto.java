@@ -1,9 +1,12 @@
 package org.yusufakbas.whispersafe.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserDto {
     private Long id;
     private String username;
     private String email;
+    @JsonProperty("profile_image")
     private String profileImage;
 
     public UserDto() {

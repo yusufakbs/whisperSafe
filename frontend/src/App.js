@@ -5,6 +5,7 @@ import Status from "./components/Status/Status.jsx";
 import StatusViewer from "./components/Status/StatusViewer.jsx";
 import SignIn from "./components/Register/SignIn.jsx";
 import SignUp from "./components/Register/SignUp.jsx";
+import Profile from "./components/Profile/Profile.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/status/:userId" element={<StatusViewer />}></Route>
         <Route path="/signin" element={<SignIn />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
       </Routes>
     </div>
   );

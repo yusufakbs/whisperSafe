@@ -76,19 +76,25 @@ export const searchUser = (data) => async (dispatch) => {
 
 export const updateUser = (data) => async (dispatch) => {
     try {
-        const res = await fetch(`${BASE_API_URL}/users/update/${data.id}`, {
+        const res = await fetch(`${BASE_API_URL}/users/update`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json",
                 Authorization: `Bearer ${data.token}`
             },
+            body: JSON.stringify(data.data)
+        });
 
-        })
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const resData = await res.json();
         console.log("update user", resData);
-        dispatch({ type: UPDATE_USER, payload: resData })
+        dispatch({ type: UPDATE_USER, payload: resData });
     } catch (error) {
-
+        console.error("Error updating user:", error);
     }
 }
 

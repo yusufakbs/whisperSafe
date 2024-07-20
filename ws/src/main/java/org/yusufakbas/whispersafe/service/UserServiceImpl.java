@@ -47,12 +47,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users updateUser(Long userId, UpdateUserRequestDto updateUserRequest) throws UserException {
         Users user = findUserById(userId);
-
-        if (updateUserRequest.username() != null && updateUserRequest.profileImage() != null) {
+        System.out.println("test");
+        if (updateUserRequest.username() != null && !updateUserRequest.username().isEmpty()) {
             user.setUsername(updateUserRequest.username());
+        }
+        if (updateUserRequest.profileImage() != null && !updateUserRequest.profileImage().isEmpty()) {
             user.setProfileImage(updateUserRequest.profileImage());
         }
-
         return userRepository.save(user);
     }
 

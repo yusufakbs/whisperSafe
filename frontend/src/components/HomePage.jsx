@@ -27,7 +27,7 @@ const HomePage = () => {
   }
   const handleCreateChat = (userId) => {
   }
-  
+
   const [content, setContent] = useState("");
   const handleCreateNewMessage = () => {
     dispatch(createMessage({ token, data: { chatId: currentChat.id, content: content } }))
@@ -115,7 +115,7 @@ const HomePage = () => {
                 <div className='flex justify-between items-center p-3'>
                   <div onClick={handleNavigate} className='flex items-center space-x-3'>
                     <img className='rounded-full w-10 h-10 cursor-pointer'
-                      src="https://cdn.pixabay.com/photo/2024/03/04/16/38/cat-8612685_960_720.jpg" alt="" />
+                      src={auth.reqUser?.profile_image || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png"} alt="" />
                     <p>
                       {auth.reqUser?.username}
                     </p>

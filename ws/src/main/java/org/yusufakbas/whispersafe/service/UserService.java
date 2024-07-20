@@ -8,6 +8,7 @@ import org.yusufakbas.whispersafe.request.UpdateUserRequestDto;
 import java.util.List;
 
 
+@Service
 public interface UserService {
 
     public Users findUserById(Long id) throws UserException;
