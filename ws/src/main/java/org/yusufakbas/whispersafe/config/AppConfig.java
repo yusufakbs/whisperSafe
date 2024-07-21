@@ -23,7 +23,7 @@ public class AppConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers("/api/v1/**")
+                        authorizeRequests.requestMatchers("/api/v1/**","*")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
