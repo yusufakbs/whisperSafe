@@ -5,7 +5,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.yusufakbas.whispersafe.model.Message;
+import org.yusufakbas.whispersafe.dto.MessageDto;
 
 @Controller
 public class RealTimeChat {
@@ -17,10 +17,16 @@ public class RealTimeChat {
     }
 
     @MessageMapping("/message")
-    @SendTo("/group/public")
-    public Message receiveMessage(@Payload Message message) {
+    @SendTo("/topic/messages")
+    public MessageDto receiveMessage(@Payload MessageDto message) {
+        if (message.getChatId() == null) {
+            System.err.println("Received message with null chat: " + message);
+        } else {
+            System.out.println("Received message with chat ID: " + message.getChatId());
+        }
+
         try {
-            simpMessagingTemplate.convertAndSend("/group/" + message.getChat().getId().toString(), message);
+            simpMessagingTemplate.convertAndSend("/topic/" + message.getChatId().toString(), message);
         } catch (Exception e) {
             // Log or handle the exception
             System.err.println("Error sending message: " + e.getMessage());
@@ -28,5 +34,4 @@ public class RealTimeChat {
         }
         return message;
     }
-
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiCommentDetail } from 'react-icons/bi';
 import { TbCircleDashed } from 'react-icons/tb';
@@ -9,7 +9,6 @@ import { ImAttachment } from 'react-icons/im';
 import "./HomePage.css";
 import { useNavigate } from 'react-router-dom';
 import Profile from './Profile/Profile';
-import Status from './Status/Status';
 import { Button, Menu, MenuItem } from '@mui/material';
 import CreateGroup from './Group/CreateGroup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,11 +36,12 @@ const HomePage = () => {
   const token = localStorage.getItem("token");
 
   const getCookie = (name) => {
-    const value = `${document.cookie}`;
+    const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
       return parts.pop().split(";").shift();
     }
+    return null; // Çerez bulunamazsa null döndürün
   };
 
   const connect = () => {
@@ -49,15 +49,20 @@ const HomePage = () => {
     const temp = over(sock);
     setStompClient(temp);
     const headers = {
-      Authorization: `Bearer ${token}`,
-      "X-XSRF-TOKEN": getCookie("XSRF-TOKEN")
+      Authorization: `Bearer ${token}`
+
     };
 
-    temp.connect(headers, onConnect, onError);
-  };
-
-  const onConnect = () => {
-    setIsConnect(true);
+    temp.connect(headers,
+      () => {
+        setIsConnect(true);
+        console.log("Connected to server");
+      },
+      (error) => {
+        setIsConnect(false);
+        console.error("Connection error:", error);
+      }
+    );
   };
 
   const onError = (error) => {
@@ -79,7 +84,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (isConnect && stompClient && auth.reqUser && currentChat) {
-      const subscription = stompClient.subscribe(`/group/${currentChat.id}`, onMessageReceive);
+      const subscription = stompClient.subscribe(`/topic/${currentChat.id}`, onMessageReceive);
       return () => {
         subscription.unsubscribe();
       };
@@ -165,6 +170,14 @@ const HomePage = () => {
     }
   }, [currentChat, message.newMessage, dispatch, token]);
 
+  const messagesEndRef = useRef(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+
   return (
     <div className='relative'>
       <div className='w-full py-14 bg-[#060a09]'></div>
@@ -203,7 +216,7 @@ const HomePage = () => {
                 {querys && auth.searchUser?.map((item) => (
                   <div onClick={() => handleClickOnChatCard(item.id)} key={item.id}>
                     <hr />
-                    <ChatCard name={item.username} userImage={item.profileImage || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png"} />
+                    <ChatCard name={item.username} userImage={item.profile_image || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png"} />
                   </div>
                 ))}
                 {chat.chats.length > 0 && !querys && chat.chats.map((item) => (
@@ -211,7 +224,10 @@ const HomePage = () => {
                     <hr />
                     {!item.group && (
                       <ChatCard name={auth.reqUser.id !== item.users[0].id ? item.users[0].username : item.users[1].username}
-                        userImage={auth.reqUser.id !== item.users[0].id ? item.users[0].profileImage || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png" : item.users[1].profileImage || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png"} />
+                        userImage={auth.reqUser.id !== item.users[0].id ? item.users[0].profile_image ||
+                          "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png" :
+                          item.users[1].profile_image ||
+                          "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png"} />
                     )}
                   </div>
                 ))}
@@ -235,22 +251,25 @@ const HomePage = () => {
             <div className='header absolute top-0 w-full bg-[#f0f2f5]'>
               <div className='flex justify-between'>
                 <div className='py-3 space-x-4 flex items-center px-3'>
-                  <img className='w-10 h-10 rounded-full' src={currentChat.group ? currentChat.chat_image || "https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png" : (auth.reqUser.id !== currentChat.users[0].id ? currentChat.users[0].profileImage || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png" : currentChat.users[1].profileImage || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png")} alt="" />
+                  <img className='w-10 h-10 rounded-full' src={currentChat.group ? currentChat.chat_image || "https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png" : (auth.reqUser.id !== currentChat.users[0].id ? currentChat.users[0].profile_image || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png" : currentChat.users[1].profile_image || "https://cdn.pixabay.com/photo/2017/02/25/22/04/user-icon-2098873_960_720.png")} alt="" />
                   <p>{currentChat.group ? currentChat.chat_name : (auth.reqUser?.id === currentChat.users[0].id ? currentChat.users[1].username : currentChat.users[0].username)}</p>
                 </div>
                 <div className='py-3 flex space-x-4 items-center px-3'>
-                  <AiOutlineSearch />
-                  <Button id="basic-button" aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick}>
-                    <BsThreeDotsVertical />
-                  </Button>
+                  <BsThreeDotsVertical id="basic-button" aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick} />
+                  {/*}  <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button', }}>
+                      <MenuItem onClick={handleClose}>Delete</MenuItem>
+                      <MenuItem onClick={handleCreateGroup}>Create Group</MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Menu> */}
                 </div>
               </div>
             </div>
-            <div className='h-[85vh] overflow-y-scroll'>
-              <div className='space-y-1 flex flex-col justify-center border mt-20 py-2'>
+            <div className='h-[85vh] overflow-y-scroll pt-20'> {/* Header ve Footer için padding ekledik */}
+              <div className='space-y-1 flex flex-col justify-center border py-2'>
                 {messages.length > 0 && messages.map((item) => (
-                  <MessageCard key={item.id} isReqUserMessage={item.users && item.users.id !== auth.reqUser.id} content={item.content} />
+                  <MessageCard key={item.id} isReqUserMessage={item.users && item.users.id === auth.reqUser.id} content={item.content} />
                 ))}
+                <div ref={messagesEndRef} /> {/* Mesajların sonunu takip eden referans */}
               </div>
             </div>
             <div className='footer bg-[#f0f2f5] absolute bottom-0 w-full py-3 text-2xl'>
