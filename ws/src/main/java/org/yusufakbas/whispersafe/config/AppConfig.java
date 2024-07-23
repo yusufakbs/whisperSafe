@@ -20,17 +20,15 @@ public class AppConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/ws/**").permitAll() // WebSocket bağlantılarını izinli yapar
-                        .requestMatchers("/api/v1/**").permitAll() // Belirli API endpoint'lerini izinli yapar
-                        .anyRequest().authenticated() // Diğer tüm istekler için kimlik doğrulama gerektirir
-                ).addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class) // JwtValidator'ı gerçek
-                // filtrenizle değiştirin
-                .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırakır
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS yapılandırmasını ekler
-                .formLogin(formLogin -> formLogin.defaultSuccessUrl("/home").permitAll()) // Form login ayarlarını
-                // yapılandırır
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/ws/**").permitAll() // Allows WebSocket connections
+                        .requestMatchers("/api/v1/**").permitAll() // Allows certain API endpoints
+                        .requestMatchers(("/**")).permitAll().anyRequest().authenticated() // Requires authentication for all other requests
+                ).addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class) // Replace JwtValidator with your actual filter
+                .csrf(AbstractHttpConfigurer::disable) // Disables CSRF protection
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Adds CORS configuration
+                .formLogin(formLogin -> formLogin.defaultSuccessUrl("/home").permitAll()) // Configures form login settings
                 .httpBasic(withDefaults -> {
-                }); // HTTP Basic kimlik doğrulamayı etkinleştirir
+                }); // Enables HTTP Basic authentication
 
         return http.build();
     }
